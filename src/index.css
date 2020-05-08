@@ -1,13 +1,88 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+.titler { 
+    text-align: center;
+    margin-bottom: 16px;
+    font-weight: bold;
+}
+.textalign { 
+    text-align: center;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.semlabels { 
+    background-color:rgb(43, 45, 192); 
+    color: rgb(220, 223, 50);
+    text-align: center;
+    font-weight: bold;
+    font-size: 13px;
+    margin-bottom: 8px;
 }
+
+.semester { 
+    border-style: none;
+    padding: 3%;
+}
+
+.semesterheader { 
+    text-align: center; 
+    margin-bottom: 4px;
+}
+
+.classval { 
+    padding-right: 2%;
+}
+.classval input { 
+    width: 100%;
+}
+
+.gradeval-no { 
+    padding-left: 0%;
+    padding-right: 2%;
+}
+
+.gradeval { 
+    padding-left: 1%;
+    padding-top: 1%;
+    padding-right: 2%;
+}
+.gradeval select { 
+    width: 120%;
+}
+.unitval { 
+    padding-left: 2%;
+}
+.unitval input { 
+    width: 100%;
+}
+
+
+/* GPAScale CSS */ 
+.gpalabel { 
+    width: 30%;
+    float: left;
+    padding-top: 3%;
+    padding-left: 6%;
+}
+
+.gpainput {
+    width: 60%;
+    float: right;
+    border-style: solid;
+    border-width: 2px;
+}
+.gpatitle { 
+    font-size: 14px;
+    color: rgb(220, 223, 50);
+    font-weight: bolder;
+    border-style: solid;
+    border-color: grey;
+    text-align: center;
+    background-color: rgb(43, 45, 192);
+
+
+}
+
+.gparow { 
+   
+    margin-top: 4%;
+}
+
+
