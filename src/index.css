@@ -1,3 +1,13 @@
+body { 
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 14px;
+    background-color: rgb(231, 231, 231);
+}
+
+input { 
+    text-align: center;
+}
+
 .titler { 
     text-align: center;
     margin-bottom: 16px;
