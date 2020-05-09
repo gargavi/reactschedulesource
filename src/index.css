@@ -9,6 +9,10 @@ input {
     width: 100%;
 }
 
+.divider { 
+    height: 50px;
+}
+
 h5 { 
     font-weight: bolder;
 }
@@ -24,6 +28,26 @@ h5 {
 th,td { 
     text-align: center;
     padding-top: 4px;
+}
+.majorlabels { 
+    text-align: center;
+}
+
+.namemajorcell {
+    width: 40%;
+    padding-right: 10px;
+}
+.grademajorcell { 
+    width: 15%;
+    padding-right: 10px;
+}
+.unitmajorcell { 
+    width: 15%;
+    padding-right: 10px;
+}
+.yearmajorcell { 
+    width: 40%;
+    padding-right: 10px;
 }
 
 label { 
@@ -64,6 +88,10 @@ label {
 .col-md-4.quarter { 
     padding-right: .5%;
     padding-left: .5%;
+}
+
+.table { 
+    width: 100%;
 }
 
 .semester { 
