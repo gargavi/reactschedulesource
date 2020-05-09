@@ -1,7 +1,8 @@
 import React from 'react'; 
 import ReactDOM from 'react-dom'; 
+import 'bootstrap/dist/css/bootstrap.min.css';
 import "./index.css"
-
+import { Collapse, Button, CardBody, Card } from 'reactstrap';
 
 {/* We need multiple different classes here. 
     1. Overarching container (DONE, incomplete however) 
@@ -122,16 +123,16 @@ class Classelem extends React.Component {
     
     render () {
         return (
-            <div class = "row">
-                <div class = "col-md-7 classval">
-                    <input 
+            <tr>
+                <td class = "namecell">
+                    <input
                         id = {this.props.label}
                         name = {this.props.label}
                         value = {this.state.name}
                         onChange = {this.handleNameChange}
                     /> 
-                </div>
-                <div class = "col-md-2 gradeval"> 
+                </td>
+                <td class = "gradecell" > 
                 <select value = {this.state.value} onChange = {this.handleGPAChange}>
                     <option value ="A+"> A+ </option>
                     <option value ="A"> A </option>
@@ -149,8 +150,8 @@ class Classelem extends React.Component {
                     <option value ="P"> P </option>
                     <option value ="NP"> NP </option>
                 </select>
-                </div> 
-                <div class = "col-md-3 unitval"> 
+                </td> 
+                <td class = "unitcell"> 
                 <input  
                     id = {this.props.label}
                     name = {this.props.label}
@@ -159,8 +160,8 @@ class Classelem extends React.Component {
                     min = "0"
                     onChange = {this.handleUnitChange}
                 />
-                </div>
-            </div> 
+                </td>
+            </tr> 
         )
     }
 }
@@ -173,7 +174,7 @@ class Semester extends React.Component {
             units_sem: 0,
             classes: [0, 1, 2, 3, 4],
             units: [0, 0, 0, 0, 0],
-            names: Array(5), 
+            names: Array(5).fill(""), 
             gpas: ["A+", "A+", "A+", "A+", "A+"]
         }; 
     }
@@ -218,6 +219,39 @@ class Semester extends React.Component {
             /> 
         )
     }
+    addClass = () => { 
+        var classes_temp = this.state.classes;
+        var units_temp = this.state.units;
+        var names_temp = this.state.names; 
+        var gpas_temp = this.state.gpas;
+        classes_temp.push(classes_temp.length); 
+        units_temp.push(0); 
+        names_temp.push("");
+        gpas_temp.push("A+");
+        this.setState({ 
+            classes: classes_temp,
+            units: units_temp,
+            names: names_temp,
+            gpas: gpas_temp
+        })
+    }
+    removeClass = () => { 
+        var classes_temp = this.state.classes;
+        var units_temp = this.state.units;
+        var names_temp = this.state.names; 
+        var gpas_temp = this.state.gpas;
+        classes_temp = classes_temp.slice(0, -1); 
+        units_temp = units_temp.slice(0, -1);
+        names_temp = names_temp.slice(0, -1); 
+        gpas_temp = gpas_temp.slice(0, -1);
+        this.setState({ 
+            classes: classes_temp,
+            units: units_temp,
+            names: names_temp,
+            gpas: gpas_temp
+        })
+    }
+
     render() { 
         const classlist = this.state.classes.map((classelem) => this.renderClass(this.props.label + classelem, classelem));
         return ( 
@@ -225,22 +259,28 @@ class Semester extends React.Component {
             <div class = "semesterheader"> 
                 {this.props.label}
             </div> 
-            <div class = "row semlabels"> 
-                <div class = "col-md-7 classval"> Class Name</div>
-                <div class = "col-md-2 gradeval-no"> Grade </div> 
-                <div class = "col-md-3 unitval"> Units </div>
-            </div> 
+            <table> 
+            <tr class = "semlabels"> 
+                <th> Class Name</th>
+                <th> Grade </th> 
+                <th> Units </th>
+            </tr> 
              {classlist}
-            <div class = "row">  
-                <div class = "col-md-6 textalign"> 
-                    <h5> Units  </h5> 
-                    {this.state.units_sem} 
-                </div> 
-                <div class = "col-md-6 textalign"> 
-                    <h5> GPA  </h5> 
+             <tr> 
+                <td class = "namecell">
+                    <Button color = "success" style = {{"padding-top": "1%", "padding-bottom": "1%", "marginRight": "4%"}} onClick = {this.addClass}> +  </Button> 
+                    <Button color = "danger" style = {{"padding-top": "1%", "padding-bottom": "1%"}} onClick = {this.removeClass}>  - </Button> 
+                </td>
+                <td class = "gradecell"> 
+                    <label> GPA:  </label> 
                     {this.state.gpa_sem}
-                </div> 
-            </div> 
+                </td> 
+                <td class = "unitcell"> 
+                    <label> UNITS: </label>
+                    {this.state.units_sem} 
+                </td> 
+            </tr>
+             </table> 
             </div> 
             
         )
@@ -275,7 +315,8 @@ class Scheduler extends React.Component {
             startyear: 2018,
             cumm_gpa: "N/A", 
             cumm_unit: 0, 
-            cumm_relev_units: 0
+            cumm_relev_units: 0, 
+            opened: Array(4).fill(true)
 
         }
         this.handleGPAscaleChange.bind(this);
@@ -346,18 +387,25 @@ class Scheduler extends React.Component {
             cumm_unit: tot_units
         })
     }
-
     changeSystem = (event) => {
-        this.setState({ 
-            system: event.target.value,
-            gpas: Array(12).fill(0),
-            unit_relev_tots: Array(12).fill(0),
-            unit_tots: Array(12).fill(0)
-            }
-        )
+        if (event.target.value == "Semester") { 
+            this.setState({ 
+                system: event.target.value,
+                gpas: Array(8).fill(0),
+                unit_relev_tots: Array(8).fill(0),
+                unit_tots: Array(8).fill(0),
+                }
+            )
+        } else {
+            this.setState({ 
+                system: event.target.value,
+                gpas: Array(12).fill(0),
+                unit_relev_tots: Array(12).fill(0),
+                unit_tots: Array(12).fill(0),
+                }
+            )
+        }
     }
-
-
     renderSemester= (name, number) => { 
         return ( 
             <Semester 
@@ -367,6 +415,13 @@ class Scheduler extends React.Component {
             />
         )
     }
+    toggleyear = (num, e) => { 
+        var temp  = this.state.opened.slice(); 
+        temp[num] = !temp[num]; 
+        this.setState({ 
+            opened: temp
+        })
+    }
 
     render() {
         const sys = this.state.system; 
@@ -375,39 +430,59 @@ class Scheduler extends React.Component {
             // The goal here is to have 2 per row
             const years = [0, 1, 2, 3]
             layout = years.map(num => 
-                <div class = "row">
-                    <div class = "col-md-6"> 
-                        {this.renderSemester("Fall " + (num +this.state.startyear), 2*num)}
-                    </div> 
-                    <div class = "col-md-6"> 
-                        {this.renderSemester("Spring " + (num + this.state.startyear + 1), 2*num + 1)}
-                    </div>
-                </div> 
+            <div>
+                <Button color = "primary" style = {{ "marginTop": "4px"}} onClick = {(e) => this.toggleyear(num, e) } > Year {num + 1} </Button> 
+                    <Collapse isOpen = {this.state.opened[num]} > 
+                    <Card> 
+                    <CardBody> 
+                        <div class = "row">
+                            <div class = "col-md-6 semestersys"> 
+                                {this.renderSemester("Fall " + (num +this.state.startyear), 2*num)}
+                            </div> 
+                            <div class = "col-md-6 semestersys"> 
+                                {this.renderSemester("Spring " + (num + this.state.startyear + 1), 2*num + 1)}
+                            </div>
+                        </div> 
+                    </CardBody>
+                    </Card> 
+                </Collapse>
+            </div>
                 )
         } else { 
             // The goal her is to have 3 per row 
             const years = [0, 1, 2, 3]
             layout = years.map(num => 
-                <div class = "row">
-                    <div class = "col-md-4"> 
-                        {this.renderSemester("Fall " + (this.state.startyear + num), 3*num)}
-                    </div> 
-                    <div class = "col-md-4"> 
-                        {this.renderSemester("Winter " + (this.state.startyear + num + 1), 3*num + 1)}
-                    </div>
-                    <div class = "col-md-4"> 
-                        {this.renderSemester("Spring " + (this.state.startyear + num + 1), 3*num + 2)}
-                    </div>
-                </div> 
+                <div>
+                <Button color = "primary" style = {{ "marginTop": "4px"}} onClick = {(e) => this.toggleyear(num, e) } > Year {num + 1} </Button> 
+                    <Collapse isOpen = {this.state.opened[num]} > 
+                    <Card> 
+                    <CardBody> 
+                        <div class = "row">
+                            <div class = "col-md-4 quarter"> 
+                                {this.renderSemester("Fall " + (this.state.startyear + num), 3*num)}
+                            </div> 
+                            <div class = "col-md-4 quarter"> 
+                                {this.renderSemester("Winter " + (this.state.startyear + num + 1), 3*num + 1)}
+                            </div>
+                            <div class = "col-md-4 quarter" > 
+                                {this.renderSemester("Spring " + (this.state.startyear + num + 1), 3*num + 2)}
+                            </div>
+                        </div> 
+                        </CardBody>
+                    </Card> 
+                </Collapse>
+            </div>
                 )
         }
 
         return ( 
             <div class = "container"> 
                 <div class = "row titler"> 
-                    <h3 > 4 YEAR PLAN </h3>
+                    <h3 > Academic Planner </h3>
                     <p> You can use this to plan out your academic career at any type of institution, 
-                        specifically aimed at college or graduate students. </p>  
+                        specifically aimed at college or graduate students. First select your school system,
+                        and set the grading scale on the left hand side. If a grade (ex: P) doesn't get inclued in GPA
+                        then set its value to "N/A".   </p>  
                     <label style = {{paddingRight:'8px'}}> School System: </label> 
                     <select  value = {this.state.system} onChange = {this.changeSystem}> 
                         <option value  = "Semester">  Semester</option> 
@@ -418,16 +493,17 @@ class Scheduler extends React.Component {
                         id = "Starting semester"
                         name = "Starting semester"
                         type = "number"
+                        class = "startyear"
                         value = {this.state.startyear}
                         onChange = {(event) => {this.setState({ startyear: Number(event.target.value)})}}
                     /> 
                 </div> 
                 <div class = "row textalign"> 
-                    <label style = {{paddingRight:'8px'}}> Cummulative GPA </label> 
-                    {this.state.cumm_gpa} 
-                    <label style = {{paddingRight:'8px', paddingLeft: '8px'}}> Total Units </label> 
-                    {this.state.cumm_unit} 
-                    <label style = {{paddingRight:'8px', paddingLeft: '8px'}}> Total Credited Units </label> 
+                    <label style = {{paddingRight:'8px'}}> Cummulative GPA: </label> 
+                    {this.state.cumm_gpa}
+                    <label style = {{paddingRight:'8px', paddingLeft: '20px'}}> Total Units: </label> 
+                    {this.state.cumm_unit}
+                    <label style = {{paddingRight:'8px', paddingLeft: '20px'}}> Total Credited Units: </label> 
                     {this.state.cumm_relev_units} 
 
                 </div>
@@ -435,8 +511,8 @@ class Scheduler extends React.Component {
                     <div class = "col-md-1">
                         {this.renderGPAscale()}
                     </div> 
-                    <div class = "col-md-1"></div> 
-                    <div class = "col-md-9">
+                    
+                    <div class = "col-md-10 classesview">
                         {layout}
                     </div> 
                 </div> 

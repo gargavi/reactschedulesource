@@ -6,7 +6,40 @@ body {
 
 input { 
     text-align: center;
+    width: 100%;
 }
+
+h5 { 
+    font-weight: bolder;
+}
+
+.collapser { 
+    background-color: blue;
+    color: white;
+}
+
+.startyear { 
+    width: 10%;
+}
+th,td { 
+    text-align: center;
+    padding-top: 4px;
+}
+
+label { 
+    padding-right: 8px;
+}
+.namecell { 
+    width: 40%;
+}
+.gradecell { 
+    width: 20%;
+}
+
+.unitcell { 
+    width: 20%;
+}
+
 
 .titler { 
     text-align: center;
@@ -23,7 +56,14 @@ input {
     text-align: center;
     font-weight: bold;
     font-size: 13px;
-    margin-bottom: 8px;
+}
+.col-md-6.semestersys { 
+    padding-right: 1%;
+    padding-left: 1%;
+}
+.col-md-4.quarter { 
+    padding-right: .5%;
+    padding-left: .5%;
 }
 
 .semester { 
@@ -33,7 +73,12 @@ input {
 
 .semesterheader { 
     text-align: center; 
-    margin-bottom: 4px;
+    margin-bottom: 6px;
+    font-weight: bolder;
+    color: black;
+    border-color: black ;
+    border-style: solid;
+    
 }
 
 .classval { 
@@ -95,4 +140,6 @@ input {
     margin-top: 4%;
 }
 
-
+.classesview { 
+    padding-left: 4%;
+}
