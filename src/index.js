@@ -4,18 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import "./index.css"
 import { Collapse, Button, CardBody, Card } from 'reactstrap';
 
-{/* We need multiple different classes here. 
-    1. Overarching container (DONE, incomplete however) 
-    2. GPA values on the left side (DONE) 
-    3. List of all classes on the right hand side with:  
-        a. Name of Class
-        b. Number of Units 
-        c. Gen Ed/Major/ etc 
-    4. Semester View that have: 
-        a. Name of Class (Dropdown) 
-        b. Grade of Class 
-    5. Major View 
-*/}
+
 
 function GPAinput(props) { 
     return (
@@ -402,8 +391,7 @@ class MajorViewer extends React.Component {
         names_temp[i] = name2; 
         units_temp[i] = Number(unit); 
         weights_temp[i] = weight;
-        console.log( units_temp.reduce((a,b) => a + b, 0));
-       
+
         this.setState({ 
             units: units_temp, 
             gpas: gpa_temp, 
@@ -569,9 +557,9 @@ class Scheduler extends React.Component {
             var temp_tot = this.state.unit_relev_tots.slice();
             var temp_tot_units = this.state.unit_tots.slice(); 
             var temp_gpa_sum = this.state.gpas.slice();
-            temp_gpa_sum[number] = 0 ? 0 : gpa_sum/tot;
-            temp_tot[number] = tot; 
-            temp_tot_units[number] = tot_units;
+            temp_gpa_sum[number + 1] = 0 ? 0 : gpa_sum/tot;
+            temp_tot[number + 1] = tot; 
+            temp_tot_units[number + 1] = tot_units;
             this.setState({ 
                 gpas: temp_gpa_sum, 
                 unit_relev_tots: temp_tot,
@@ -588,7 +576,7 @@ class Scheduler extends React.Component {
         var tot_units = 0;
         var tot_relev_units = 0;
         for (var i = 0; i < gpas.length; i ++ ){
-            const grade = gpas[i]; 
+            const grade = gpas[i];
             if (!isNaN(grade)) { 
                 tot_gpa += relev_units[i] * gpas[i];
                 tot_units += units[i]; 
@@ -672,6 +660,24 @@ class Scheduler extends React.Component {
             opened: temp
         })
     }
+    previousGPA = (event) => { 
+        var temp = this.state.gpas.slice(); 
+        temp[0] = Number(event.target.value); 
+        this.setState({
+            gpas: temp
+        })
+        this.OverallStats(temp, this.state.unit_tots, this.state.unit_relev_tots)
+    }
+    previousUnits = (event) => { 
+        var temp = this.state.unit_relev_tots.slice();
+        temp[0] = Number(event.target.value); 
+        this.setState({
+            unit_relev_tots: temp, 
+            unit_tots: temp
+        })
+        this.OverallStats(this.state.gpas, temp, temp);
+    }
+
 
     render() {
         const sys = this.state.system; 
@@ -747,11 +753,32 @@ class Scheduler extends React.Component {
                         id = "Starting semester"
                         name = "Starting semester"
                         type = "number"
-                        class = "startyear"
+                        className = "startyear"
                         value = {this.state.startyear}
                         onChange = {(event) => {this.setState({ startyear: Number(event.target.value)})}}
                     /> 
                 </div> 
+                <div class = "row textalign"> 
+                    <label style = {{paddingRight:'8px'}}> Previous GPA:  </label> 
+                    <input 
+                        id = "previous gpa" 
+                        name = "previous gpa"
+                        type = "number" 
+                        className = "startyear"
+                        value = {this.state.gpas[0]}
+                        onChange = {this.previousGPA}
+                    />
+                    <label style = {{ paddingLeft: '8px', paddingRight:'8px'}}> Previous Units:  </label> 
+                    <input 
+                        id = "previous units" 
+                        name = "previous units"
+                        type = "number" 
+                        min = "0"
+                        className = "startyear"
+                        value = {this.state.unit_relev_tots[0]}
+                        onChange = {this.previousUnits}
+                    />
+                </div>
                 <div class = "row textalign"> 
                     <label style = {{paddingRight:'8px'}}> Cummulative GPA: </label> 
                     {this.state.cumm_gpa}
