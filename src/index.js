@@ -501,9 +501,9 @@ class Scheduler extends React.Component {
                 "P" : "N/A", 
                 "NP" : "N/A", 
             },
-            gpas: new Array(8).fill(0), 
-            unit_tots: new Array(8).fill(0), 
-            unit_relev_tots:  new Array(8).fill(0), 
+            gpas: new Array(9).fill(0), 
+            unit_tots: new Array(9).fill(0), 
+            unit_relev_tots:  new Array(9).fill(0), 
             system: "Semester", 
             startyear: 2018,
             cumm_gpa: "N/A", 
@@ -741,6 +741,8 @@ class Scheduler extends React.Component {
                         <li> First Select Your System </li>
                         <li> Select Your Starting School Year </li> 
                         <li> Input the Grading System (If a grade doesn't count towards GPA put "N/A") </li> 
+                        <li> If you have already completed coursework and don't need to manually input it, then simply put your GPA and unit total 
+                            in the specified area </li> 
                         <li> Input Your Grades (Checkbox will add a 1 point increase) </li> 
                     </div> 
                     <label style = {{paddingRight:'8px'}}> School System: </label> 
