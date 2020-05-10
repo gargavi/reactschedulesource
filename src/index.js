@@ -87,15 +87,15 @@ class GPAchanger extends React.Component {
 
     }
 }
-
 class Classelem extends React.Component { 
     constructor(props) { 
         super(props) 
         this.state = { 
             name: "",
-            value: "A+",
+            grade: "A+",
             unit: "",
-            previous: ""
+            previous: "",
+            weighted: false
         }
     }
     handleNameChange = (event) => {
@@ -106,18 +106,18 @@ class Classelem extends React.Component {
         
     }
     handleNameBlur  = (event) => {
-        this.props.handleChange(event.target.value, this.state.value, this.state.unit, this.state.previous);
         this.setState({ 
             previous: event.target.value
         })
+        this.props.handleChange(this.props.label, event.target.value, this.state.grade, this.state.unit, this.state.weighted);
     }
 
     handleGPAChange = (event) => { 
         this.setState({
-            value: event.target.value
+            grade: event.target.value
         });
         this.props.handleGPAChange(event.target.value, this.props.number);
-        this.props.handleChange(this.state.name, event.target.value, this.state.unit, this.state.previous);
+        this.props.handleChange(this.props.label, this.state.name, event.target.value, this.state.unit, this.state.weighted);
     }
     handleUnitChange = (event) => {
         var val = event.target.value;
@@ -126,23 +126,39 @@ class Classelem extends React.Component {
             unit: val
         });
         this.props.handleUnitChange(val, this.props.number);
-        this.props.handleChange(this.state.name, this.state.value, event.target.value, this.state.previous);
+        this.props.handleChange(this.props.label, this.state.name, this.state.grade, event.target.value, this.state.weighted);
     }
-    
+    handleWeightChange = () => { 
+        this.setState({ 
+            weighted: !this.state.weighted
+        })
+        this.props.handleWeightChange(!this.state.weighted, this.props.number);
+        this.props.handleChange(this.props.label, this.state.name, this.state.grade, this.state.unit, !this.state.weighted);
+    }
+
+
     render () {
         return (
             <tr>
+                <td class = "checkcell"> 
+                    <input 
+                        name = "weighted"
+                        type = "checkbox"
+                        checked = {this.state.weighted}
+                        onChange = {this.handleWeightChange}
+                    /> 
+                </td> 
                 <td class = "namecell">
                     <input
                         id = {this.props.label}
-                        name = {this.props.label}
+                        name = "name"
                         value = {this.state.name}
                         onChange = {this.handleNameChange}
                         onBlur = {this.handleNameBlur}
                     /> 
                 </td>
                 <td class = "gradecell" > 
-                <select value = {this.state.value} onChange = {this.handleGPAChange}>
+                <select name = "grade" value = {this.state.value} onChange = {this.handleGPAChange}>
                     <option value ="A+"> A+ </option>
                     <option value ="A"> A </option>
                     <option value ="A-"> A- </option>
@@ -163,7 +179,7 @@ class Classelem extends React.Component {
                 <td class = "unitcell"> 
                 <input  
                     id = {this.props.label}
-                    name = {this.props.label}
+                    name = "unit"
                     value = {this.state.unit} 
                     type = "number"
                     min = "0"
@@ -185,6 +201,7 @@ class Semester extends React.Component {
             units: [0, 0, 0, 0, 0],
             names: Array(5).fill(""), 
             gpas: ["A+", "A+", "A+", "A+", "A+"],
+            weights: Array(5).fill(false)
         }; 
     }
 
@@ -195,13 +212,12 @@ class Semester extends React.Component {
             names: temp,
         })
     }
-
     handleGPAChange = (value, i) => { 
         var temp = this.state.gpas.slice(); 
         temp[i] = value; 
         this.setState({ 
             gpas: temp,
-            gpa_sem: this.props.calculateGPA(this.state.units, temp, this.props.number)
+            gpa_sem: this.props.calculateGPA(this.state.units, temp, this.props.number, this.state.weights)
         })
          
     }
@@ -212,15 +228,21 @@ class Semester extends React.Component {
         this.setState({ 
             units: temp,
             units_sem: temp.reduce((a,b) => a + b, 0),
-            gpa_sem: this.props.calculateGPA(temp, this.state.gpas, this.props.number)
+            gpa_sem: this.props.calculateGPA(temp, this.state.gpas, this.props.number, this.state.weights)
         })
         
     }
-
-    handleChange = (name, gpa, units, previous) => { 
-        this.props.handleChange(name, gpa, units, previous, this.props.label);
+    handleChange = (label, name, gpa, units, weighted) => { 
+        this.props.handleChange(label, name, gpa, units, weighted, this.props.label);
     }
-
+    handleWeightChange = (value, i ) => { 
+        var temp = this.state.weights.slice(); 
+        temp[i] = value;
+        this.setState({ 
+            weights: temp,
+            gpa_sem: this.props.calculateGPA(this.state.units, this.state.gpas, this.props.number, temp)
+        })
+    }
     renderClass = (label, i ) => { 
         return ( 
             <Classelem 
@@ -231,42 +253,43 @@ class Semester extends React.Component {
                 handleUnitChange = {this.handleUnitChange} 
                 handleChange = {this.handleChange}
                 remove = {this.props.removeClassEntry}
+                handleWeightChange = {this.handleWeightChange}
             /> 
         )
     }
     addClass = () => { 
-        var classes_temp = this.state.classes;
-        var units_temp = this.state.units;
-        var names_temp = this.state.names; 
-        var gpas_temp = this.state.gpas;
+        var classes_temp = this.state.classes.slice();
+        var units_temp = this.state.units.slice();
+        var names_temp = this.state.names.slice(); 
+        var gpas_temp = this.state.gpas.slice();
+        var weights_temp = this.state.weights.slice();
         classes_temp.push(classes_temp.length); 
         units_temp.push(0); 
         names_temp.push("");
         gpas_temp.push("A+");
+        weights_temp.push(false);
         this.setState({ 
             classes: classes_temp,
             units: units_temp,
             names: names_temp,
-            gpas: gpas_temp
+            gpas: gpas_temp,
+            weights: weights_temp
         })
     }
     removeClass = () => { 
-        var classes_temp = this.state.classes;
-        var units_temp = this.state.units;
-        var names_temp = this.state.names; 
-        var gpas_temp = this.state.gpas;
-        classes_temp = classes_temp.slice(0, -1); 
-        units_temp = units_temp.slice(0, -1);
-        names_temp = names_temp.slice(0, -1); 
-        gpas_temp = gpas_temp.slice(0, -1);
+        var classes_temp = this.state.classes.slice(0, -1); 
+        var units_temp = this.state.units.slice(0, -1);
+        var names_temp = this.state.names.slice(0, -1); 
+        var gpas_temp = this.state.gpas.slice(0, -1);
+        var weights_temp = this.state.weights.slice(0, -1);
         this.setState({ 
             classes: classes_temp,
             units: units_temp,
             names: names_temp,
-            gpas: gpas_temp
+            gpas: gpas_temp,
+            weights: weights_temp
         })
     }
-
     render() { 
         const classlist = this.state.classes.map((classelem) => this.renderClass(this.props.label + classelem, classelem));
         return ( 
@@ -276,7 +299,8 @@ class Semester extends React.Component {
             </div> 
             <table>   
             <thead> 
-                <tr class = "semlabels"> 
+                <tr class = "semlabels">
+                    <th>  </th>  
                     <th> Class Name</th>
                     <th> Grade </th> 
                     <th> Units </th>
@@ -285,6 +309,8 @@ class Semester extends React.Component {
             <tbody> 
             {classlist}    
              <tr> 
+                 <td class = "checkcell"> 
+                 </td> 
                 <td class = "namecell">
                     <Button color = "success" style = {{"padding-top": "1%", "padding-bottom": "1%", "marginRight": "4%"}} onClick = {this.addClass}> +  </Button> 
                     <Button color = "danger" style = {{"padding-top": "1%", "padding-bottom": "1%"}} onClick = {this.removeClass}>  - </Button> 
@@ -350,7 +376,6 @@ class MajorEleme extends React.Component {
     }
 }
 
-
 class MajorViewer extends React.Component { 
     constructor(props) { 
         super(props) 
@@ -361,24 +386,31 @@ class MajorViewer extends React.Component {
             units: Array(8).fill(0),
             names: Array(8).fill(""), 
             gpas: Array(8).fill("A+"),
+            weights: Array(8).fill(false)
         }
     }
+    
     implementChange = (name, i) => { 
-        const [gpa, unit , year] = this.props.getValue(name);
-        console.log(unit);
+        const[name2, gpa, unit, year, weight] = this.props.getValue(name);
+
         var gpa_temp = this.state.gpas.slice();
         var units_temp = this.state.units.slice(); 
         var names_temp = this.state.names.slice(); 
+       
+        var weights_temp = this.state.weights.slice(); 
         gpa_temp[i] = gpa; 
-        names_temp[i] = name; 
+        names_temp[i] = name2; 
         units_temp[i] = Number(unit); 
-        console.log(gpa_temp, units_temp);
+        weights_temp[i] = weight;
+        console.log( units_temp.reduce((a,b) => a + b, 0));
+       
         this.setState({ 
             units: units_temp, 
             gpas: gpa_temp, 
             names: names_temp,
-            units_tots: units_temp.reduce((a,b) => a + b, 0),
-            gpa_cumm: this.props.calculateGPA(units_temp, gpa_temp, -1)
+            unit_tots: units_temp.reduce((a,b) => a + b, 0),
+            gpa_cumm: this.props.calculateGPA(units_temp, gpa_temp, -1, weights_temp),
+            weights: weights_temp
         })
         return ([gpa, unit, year])
     }
@@ -460,7 +492,6 @@ class MajorViewer extends React.Component {
 
 }
 
-
 class Scheduler extends React.Component { 
     constructor(props) { 
         super(props)
@@ -515,16 +546,22 @@ class Scheduler extends React.Component {
         /> 
         )
     }
-
-    calculateGPA = (units, gpa, number) => { 
+    
+    calculateGPA = (units, gpa, number, weights) => { 
+        // NEED TO FIX CALCULATOR
         var gpa_sum = 0;
         var tot = 0;
         var tot_units = 0;
         for (var i = 0; i< gpa.length; i ++ ) { 
             var grade = this.state.grades[gpa[i]];
-            if (!isNaN(Number(grade))) { 
-                gpa_sum += units[i] * grade ; 
-                tot += units[i]
+            if (!isNaN(Number(grade))) {
+                if (weights[i]) { 
+                    gpa_sum += units[i] * (grade + 1) ; 
+                    tot += units[i]
+                } else { 
+                    gpa_sum += units[i] * grade ; 
+                    tot += units[i]
+                }
             };
             tot_units += units[i];
         };
@@ -584,21 +621,30 @@ class Scheduler extends React.Component {
             )
         }
     }
-    handleclassChanges = (name, gpa, units, previousname, label) => {
+    //this.props.handleChange(label, name, gpa, units, weighted, this.props.label);
+    handleclassChanges = (classlabel, name, gpa, units, weights, label) => {
         var temp = Object.assign({}, this.state.classdict);
-        if (!previousname == "") { 
-            delete temp[previousname];
+        const old_val = temp[classlabel];
+        temp[classlabel] = [name, gpa, units, label, weights];
+        var class_temp = this.state.allclasses.slice();
+        if ((old_val) && !(old_val[0] == "")) { 
+            class_temp = class_temp.filter(function(value, index, arr){return !(value == old_val[0]);})
         }
-        temp[name] = [gpa, units, label];
+        class_temp.push(name);
         this.setState({ 
             classdict: temp,
-            allclasses: Object.keys(temp)
+            allclasses: class_temp
         });
     }
 
     getClassValues = (name) => { 
-        return (this.state.classdict[name])
+        for (const property in this.state.classdict) { 
+            if (this.state.classdict[property][0] == name) { 
+                return (this.state.classdict[property])
+            }
+        }
     }
+
     renderMajorViewer = () => { 
         return (
             <MajorViewer
@@ -684,9 +730,13 @@ class Scheduler extends React.Component {
                 <div class = "row titler"> 
                     <h3 > Academic Planner </h3>
                     <p> You can use this to plan out your academic career at any type of institution, 
-                        specifically aimed at college or graduate students. First select your school system,
-                        and set the grading scale on the left hand side. If a grade (ex: P) doesn't get inclued in GPA
-                        then set its value to "N/A".   </p>  
+                        specifically aimed at college or graduate students.</p> 
+                    <div class = "listelem"> 
+                        <li> First Select Your System </li>
+                        <li> Select Your Starting School Year </li> 
+                        <li> Input the Grading System (If a grade doesn't count towards GPA put "N/A") </li> 
+                        <li> Input Your Grades (Checkbox will add a 1 point increase) </li> 
+                    </div> 
                     <label style = {{paddingRight:'8px'}}> School System: </label> 
                     <select  value = {this.state.system} onChange = {this.changeSystem}> 
                         <option value  = "Semester">  Semester</option> 
