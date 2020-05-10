@@ -736,14 +736,17 @@ class Scheduler extends React.Component {
                 <div class = "row titler"> 
                     <h3 > Academic Planner </h3>
                     <p> You can use this to plan out your academic career at any type of institution, 
-                        specifically aimed at college or graduate students.</p> 
+                        specifically aimed at college students.</p> 
                     <div class = "listelem"> 
-                        <li> First Select Your System </li>
-                        <li> Select Your Starting School Year </li> 
-                        <li> Input the Grading System (If a grade doesn't count towards GPA put "N/A") </li> 
-                        <li> If you have already completed coursework and don't need to manually input it, then simply put your GPA and unit total 
-                            in the specified area </li> 
-                        <li> Input Your Grades (Checkbox will add a 1 point increase) </li> 
+                        <ol> 
+                            <li> Select your System and Starting School Year </li> 
+                            <li> Input the Grading System (If a grade doesn't count towards GPA put "N/A") </li> 
+                            <li> If you have already completed coursework and don't need to manually input it, then simply put your GPA and unit total 
+                                in the specified area </li> 
+                            <li> Input Your Grades (Checkbox will add a 1 point increase) </li> 
+                        </ol>
+                        If you want to see how I made this, check out <a href = "https://github.com/gargavi/reactschedule" target = "_blank"> my github </a>
+                        and if you want to see other projects I've done check out  <a href = "https://www.avigarg.me" target = "_blank"> my website. </a>
                     </div> 
                     <label style = {{paddingRight:'8px'}}> School System: </label> 
                     <select  value = {this.state.system} onChange = {this.changeSystem}> 

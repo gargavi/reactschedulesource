@@ -70,9 +70,11 @@ label {
 
 .titler { 
     text-align: center;
-    margin-bottom: 16px;
+
     font-weight: bold;
 }
+
+
 .listelem { 
     margin: auto;
     align-self: center;
@@ -80,10 +82,11 @@ label {
     font-weight: normal;
     font-size: 14px;
     width: 60%;
-    padding-bottom: 4%;
+    padding-bottom: 1%;
 }
 .textalign { 
     text-align: center;
+    padding-top: 1.5%;
 }
 
 .semlabels { 
