@@ -764,7 +764,7 @@ class Scheduler extends React.Component {
                     /> 
                 </div> 
                 <div class = "row textalign"> 
-                    <label style = {{paddingRight:'8px'}}> Previous GPA:  </label> 
+                    <label style = {{paddingRight:'8px'}}> Current GPA:  </label> 
                     <input 
                         id = "previous gpa" 
                         name = "previous gpa"
@@ -773,7 +773,7 @@ class Scheduler extends React.Component {
                         value = {this.state.gpas[0]}
                         onChange = {this.previousGPA}
                     />
-                    <label style = {{ paddingLeft: '8px', paddingRight:'8px'}}> Previous Units:  </label> 
+                    <label style = {{ paddingLeft: '8px', paddingRight:'8px'}}> Current Total Units:  </label> 
                     <input 
                         id = "previous units" 
                         name = "previous units"
@@ -785,11 +785,11 @@ class Scheduler extends React.Component {
                     />
                 </div>
                 <div class = "row textalign"> 
-                    <label style = {{paddingRight:'8px'}}> Cummulative GPA: </label> 
+                    <label style = {{paddingRight:'8px'}}> Predicted GPA: </label> 
                     {this.state.cumm_gpa}
-                    <label style = {{paddingRight:'8px', paddingLeft: '20px'}}> Total Units: </label> 
+                    <label style = {{paddingRight:'8px', paddingLeft: '20px'}}> Predicted Total Units: </label> 
                     {this.state.cumm_unit}
-                    <label style = {{paddingRight:'8px', paddingLeft: '20px'}}> Total Credited Units: </label> 
+                    <label style = {{paddingRight:'8px', paddingLeft: '20px'}}> Predicted Credited Units: </label> 
                     {this.state.cumm_relev_units} 
 
                 </div>
