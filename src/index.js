@@ -560,12 +560,15 @@ class Scheduler extends React.Component {
             temp_gpa_sum[number + 1] = 0 ? 0 : gpa_sum/tot;
             temp_tot[number + 1] = tot; 
             temp_tot_units[number + 1] = tot_units;
+            console.log(temp_tot);
+            console.log(temp_tot_units);
+            console.log(temp_gpa_sum);
             this.setState({ 
                 gpas: temp_gpa_sum, 
                 unit_relev_tots: temp_tot,
                 unit_tots: temp_tot_units
             })
-            this.OverallStats(temp_gpa_sum, temp_tot, temp_tot_units)
+            this.OverallStats(temp_gpa_sum, temp_tot_units, temp_tot);
         }
         return (
             (tot == 0 ? 0 : (gpa_sum/tot).toFixed(3))
@@ -579,10 +582,11 @@ class Scheduler extends React.Component {
             const grade = gpas[i];
             if (!isNaN(grade)) { 
                 tot_gpa += relev_units[i] * gpas[i];
-                tot_units += units[i]; 
                 tot_relev_units += relev_units[i];
             } 
+            tot_units += units[i]; 
         }
+        console.log(tot_units);
         const cummulative_gpa = (tot_relev_units== 0? 0 : tot_gpa/tot_relev_units); 
         this.setState({ 
             cumm_gpa: (cummulative_gpa == 0? "N/A": cummulative_gpa.toFixed(3)), 
@@ -736,7 +740,7 @@ class Scheduler extends React.Component {
                 <div class = "row titler"> 
                     <h3 > Academic Planner </h3>
                     <p> You can use this to plan out your academic career at any type of institution, 
-                        specifically aimed at college students.</p> 
+                        specifically aimed at college and high school students.</p> 
                     <div class = "listelem"> 
                         <ol> 
                             <li> Select your System and Starting School Year </li> 
@@ -744,10 +748,11 @@ class Scheduler extends React.Component {
                             <li> If you are part way to graduation you can put your current GPA and unit total and then 
                                 adjust the semesters after (i.e if you are a first semester junior, 
                                 you can input your GPA and units through sophomore year and then start in year 3). </li> 
-                            <li> Input Your Grades (Checkbox indicates weighted class) </li> 
+                            <li> Input Your Grades. The Checkbox indicates weighted class (i.e AP or Honors Classes)) </li> 
                         </ol>
                         If you want to see how I made this, check out <a href = "https://github.com/gargavi/reactschedule" target = "_blank"> my github </a>
-                        and if you want to see other projects I've done check out  <a href = "https://www.avigarg.me" target = "_blank"> my website. </a>
+                        and if you want to see other projects I've done check out  <a href = "https://www.avigarg.me" target = "_blank"> my website. </a> This 
+                        was inspired mainly by my sister and intense boredom. 
                     </div> 
                     <label style = {{paddingRight:'8px'}}> School System: </label> 
                     <select  value = {this.state.system} onChange = {this.changeSystem}> 
