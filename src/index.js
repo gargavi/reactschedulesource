@@ -740,10 +740,11 @@ class Scheduler extends React.Component {
                     <div class = "listelem"> 
                         <ol> 
                             <li> Select your System and Starting School Year </li> 
-                            <li> Input the Grading System (If a grade doesn't count towards GPA put "N/A") </li> 
-                            <li> If you have already completed coursework and don't need to manually input it, then simply put your GPA and unit total 
-                                in the specified area </li> 
-                            <li> Input Your Grades (Checkbox will add a 1 point increase) </li> 
+                            <li> Adjust the Grading System (If a grade doesn't count towards GPA put "N/A") </li> 
+                            <li> If you are part way to graduation you can put your current GPA and unit total and then 
+                                adjust the semesters after (i.e if you are a first semester junior, 
+                                you can input your GPA and units through sophomore year and then start in year 3). </li> 
+                            <li> Input Your Grades (Checkbox indicates weighted class) </li> 
                         </ol>
                         If you want to see how I made this, check out <a href = "https://github.com/gargavi/reactschedule" target = "_blank"> my github </a>
                         and if you want to see other projects I've done check out  <a href = "https://www.avigarg.me" target = "_blank"> my website. </a>
