@@ -560,9 +560,6 @@ class Scheduler extends React.Component {
             temp_gpa_sum[number + 1] = 0 ? 0 : gpa_sum/tot;
             temp_tot[number + 1] = tot; 
             temp_tot_units[number + 1] = tot_units;
-            console.log(temp_tot);
-            console.log(temp_tot_units);
-            console.log(temp_gpa_sum);
             this.setState({ 
                 gpas: temp_gpa_sum, 
                 unit_relev_tots: temp_tot,
@@ -586,7 +583,6 @@ class Scheduler extends React.Component {
             } 
             tot_units += units[i]; 
         }
-        console.log(tot_units);
         const cummulative_gpa = (tot_relev_units== 0? 0 : tot_gpa/tot_relev_units); 
         this.setState({ 
             cumm_gpa: (cummulative_gpa == 0? "N/A": cummulative_gpa.toFixed(3)), 
