@@ -775,7 +775,7 @@ class Scheduler extends React.Component {
                         value = {this.state.gpas[0]}
                         onChange = {this.previousGPA}
                     />
-                    <label style = {{ paddingLeft: '8px', paddingRight:'8px'}}> Current Total Units:  </label> 
+                    <label style = {{ paddingLeft: '8px', paddingRight:'8px'}}> Current Total Credited Units:  </label> 
                     <input 
                         id = "previous units" 
                         name = "previous units"
