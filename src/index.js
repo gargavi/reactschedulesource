@@ -501,9 +501,9 @@ class Scheduler extends React.Component {
                 "P" : "N/A", 
                 "NP" : "N/A", 
             },
-            gpas: new Array(9).fill(0), 
-            unit_tots: new Array(9).fill(0), 
-            unit_relev_tots:  new Array(9).fill(0), 
+            gpas: new Array(40).fill(0), 
+            unit_tots: new Array(40).fill(0), 
+            unit_relev_tots:  new Array(40).fill(0), 
             system: "Semester", 
             startyear: 2018,
             cumm_gpa: "N/A", 
@@ -513,7 +513,9 @@ class Scheduler extends React.Component {
             classdict: Object({ 
                 "": ["", "", ""]
             }),
-            allclasses: [""]
+            allclasses: [""], 
+            years: [0, 1, 2, 3], 
+            summers: [false, false, false, false]
 
         }
         this.handleGPAscaleChange.bind(this);
@@ -678,58 +680,159 @@ class Scheduler extends React.Component {
         this.OverallStats(this.state.gpas, temp, temp);
     }
 
+    renderYear = (number) => { 
+        let terms; 
+        if (this.state.system == "Semester") { 
+            terms = ["Fall ", "Spring "]; 
+            var semesarray = [0, 1];
+            var semesyear = [0, 1]
+        } else { 
+            terms = ["Fall ", "Winter ", "Spring "]; 
+            var semesarray = [0, 1, 2];
+            var semesyear = [0, 1, 1];
+        }
+        var semesters = semesarray.length;
+        if (this.state.summers[number]) { 
+            terms.push("Summer "); 
+            var className = "col-md-" + 12/Number(semesters + 1) + " semestersys";
+            semesarray.push(semesarray.length); 
+            semesyear.push(1);
+            var layout =
+            <div> 
+            <div class = "col-md-11"> 
+            {semesarray.map(num => 
+                <div className = {className} > 
+                    {this.renderSemester(terms[num] + (number + semesyear[num] + this.state.startyear), 5*number + num  )}
+                </div>
+                )}
+            </div>
+            <div class = "col-md-1"> 
+                <Button color = "danger" style = {{"padding-top": "1%", "padding-bottom": "1%", "marginRight": "4%"}} onClick = {() => {var temp= this.state.summers.slice(); temp[number] = !temp[number]; this.setState({summers: temp} )}}> Summer  </Button>
+            </div>
+            </div>;
+        } else { 
+            var className = "col-md-" + 12/Number(semesters) + " semestersys";
+            var layout =
+            <div> 
+            <div class = "col-md-11"> 
+            {semesarray.map(num => 
+                <div className = {className} > 
+                     {this.renderSemester(terms[num] + (number + semesyear[num] + this.state.startyear), 5*number + num  )}
+                </div>
+                )}
+            </div>
+            <div class = "col-md-1"> 
+                <Button color = "success" style = {{"padding-top": "1%", "padding-bottom": "1%", "marginRight": "4%"}} onClick = {() => {var temp= this.state.summers.slice(); temp[number] = !temp[number]; this.setState({summers:temp })}}> Summer  </Button>
+            </div>
+            </div>;
+        }
 
-    render() {
-        const sys = this.state.system; 
-        let layout;
-        if (sys == "Semester") { 
-            // The goal here is to have 2 per row
-            const years = [0, 1, 2, 3]
-            layout = years.map(num => 
-            <div>
-                <Button color = "primary" style = {{ "marginTop": "4px"}} onClick = {(e) => this.toggleyear(num, e) } > Year {num + 1} </Button> 
-                    <Collapse isOpen = {this.state.opened[num]} > 
+        
+
+
+        return (
+        <div>
+            <Button color = "primary" style = {{ "marginTop": "4px"}} onClick = {(e) => this.toggleyear(number, e) } > Year {number + 1} </Button> 
+                <Collapse isOpen = {this.state.opened[number]} > 
                     <Card> 
                     <CardBody> 
                         <div class = "row">
-                            <div class = "col-md-6 semestersys"> 
-                                {this.renderSemester("Fall " + (num +this.state.startyear), 2*num)}
-                            </div> 
-                            <div class = "col-md-6 semestersys"> 
-                                {this.renderSemester("Spring " + (num + this.state.startyear + 1), 2*num + 1)}
-                            </div>
+                            {layout}
                         </div> 
                     </CardBody>
                     </Card> 
                 </Collapse>
             </div>
-                )
-        } else { 
-            // The goal her is to have 3 per row 
-            const years = [0, 1, 2, 3]
-            layout = years.map(num => 
-                <div>
-                <Button color = "primary" style = {{ "marginTop": "4px"}} onClick = {(e) => this.toggleyear(num, e) } > Year {num + 1} </Button> 
-                    <Collapse isOpen = {this.state.opened[num]} > 
-                    <Card> 
-                    <CardBody> 
-                        <div class = "row">
-                            <div class = "col-md-4 quarter"> 
-                                {this.renderSemester("Fall " + (this.state.startyear + num), 3*num)}
-                            </div> 
-                            <div class = "col-md-4 quarter"> 
-                                {this.renderSemester("Winter " + (this.state.startyear + num + 1), 3*num + 1)}
-                            </div>
-                            <div class = "col-md-4 quarter" > 
-                                {this.renderSemester("Spring " + (this.state.startyear + num + 1), 3*num + 2)}
-                            </div>
-                        </div> 
-                        </CardBody>
-                    </Card> 
-                </Collapse>
-            </div>
-                )
-        }
+            )
+
+    }
+
+    addYear = () => { 
+        var temp_years = this.state.years; 
+        var temp_opened = this.state.opened; 
+        temp_opened.push(true);
+        temp_years.push(temp_years.length); 
+        this.setState({ 
+            years: temp_years,
+            opened: temp_opened
+        })
+    }
+    
+    removeYear = () => { 
+        var temp_years = this.state.years.slice(0, - 1);
+        var temp_opened = this.state.opened.slice(0, -1);
+        this.setState({ 
+            years: temp_years,
+            opened: temp_opened
+        })
+    }
+
+    renderYears= () => { 
+        let layout; 
+        return (
+        layout = 
+        this.state.years.map(num => 
+            this.renderYear(num)
+            )
+        )
+        return (
+            layout
+        )
+    }
+
+
+  
+    render() {
+        // const sys = this.state.system; 
+        // let layout;
+        // if (sys == "Semester") { 
+        //     // The goal here is to have 2 per row
+        //     const years = [0, 1, 2, 3]
+        //     layout = years.map(num => 
+        //     <div>
+        //         <Button color = "primary" style = {{ "marginTop": "4px"}} onClick = {(e) => this.toggleyear(num, e) } > Year {num + 1} </Button> 
+        //             <Collapse isOpen = {this.state.opened[num]} > 
+        //             <Card> 
+        //             <CardBody> 
+        //                 <div class = "row">
+        //                     <div class = "col-md-6 semestersys"> 
+        //                         {this.renderSemester("Fall " + (num +this.state.startyear), 2*num)}
+        //                     </div> 
+        //                     <div class = "col-md-6 semestersys"> 
+        //                         {this.renderSemester("Spring " + (num + this.state.startyear + 1), 2*num + 1)}
+        //                     </div>
+        //                 </div> 
+        //             </CardBody>
+        //             </Card> 
+        //         </Collapse>
+        //     </div>
+        //         )
+        // } else { 
+        //     // The goal her is to have 3 per row 
+        //     const years = [0, 1, 2, 3]
+        //     layout = years.map(num => 
+        //         <div>
+        //         <Button color = "primary" style = {{ "marginTop": "4px"}} onClick = {(e) => this.toggleyear(num, e) } > Year {num + 1} </Button> 
+        //             <Collapse isOpen = {this.state.opened[num]} > 
+        //             <Card> 
+        //             <CardBody> 
+        //                 <div class = "row">
+        //                     <div class = "col-md-4 quarter"> 
+        //                         {this.renderSemester("Fall " + (this.state.startyear + num), 3*num)}
+        //                     </div> 
+        //                     <div class = "col-md-4 quarter"> 
+        //                         {this.renderSemester("Winter " + (this.state.startyear + num + 1), 3*num + 1)}
+        //                     </div>
+        //                     <div class = "col-md-4 quarter" > 
+        //                         {this.renderSemester("Spring " + (this.state.startyear + num + 1), 3*num + 2)}
+        //                     </div>
+        //                 </div> 
+        //                 </CardBody>
+        //             </Card> 
+        //         </Collapse>
+        //     </div>
+        //         )
+        // }
 
         return ( 
             <div class = "container"> 
@@ -798,12 +901,17 @@ class Scheduler extends React.Component {
                 <div class = "row" > 
                     <div class = "col-md-1">
                         {this.renderGPAscale()}
+                    </div>             
+                    <div class = "col-md-11 classesview">
+                        {this.renderYears()}
                     </div> 
-                    
-                    <div class = "col-md-10 classesview">
-                        {layout}
-                    </div> 
-                </div> 
+                </div>
+                <div class = "row">
+                    <div class = "textalign">
+                    <Button color = "success" style = {{"padding-top": "1%", "padding-bottom": "1%", "marginRight": "4%"}} onClick = {this.addYear}> +  </Button> 
+                     <Button color = "danger" style = {{"padding-top": "1%", "padding-bottom": "1%"}} onClick = {this.removeYear}>  - </Button> 
+                    </div>
+                </div>
                 <div class = "divider">
                 </div>
                 <div> 
