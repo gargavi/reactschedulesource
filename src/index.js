@@ -71,6 +71,8 @@ class GPAchanger extends React.Component {
             {this.renderGPAinput("F", 12)}
             {this.renderGPAinput("P", 13)}
             {this.renderGPAinput("NP", 14)}
+            <p style = {{"paddingTop" : "8%"}}> NG = No Grade</p>
+            <p> NC = No Credit</p> 
         </div> 
         )
 
@@ -498,8 +500,8 @@ class Scheduler extends React.Component {
                 "D": 1.0,
                 "D-": .7, 
                 "F": 0,
-                "P" : "N/A", 
-                "NP" : "N/A", 
+                "P" : "NG", 
+                "NP" : "NC", 
             },
             gpas: new Array(40).fill(0), 
             unit_tots: new Array(40).fill(0), 
@@ -515,7 +517,8 @@ class Scheduler extends React.Component {
             }),
             allclasses: [""], 
             years: [0, 1, 2, 3], 
-            summers: [false, false, false, false]
+            summers: [false, false, false, false],
+            majors: [0]
 
         }
         this.handleGPAscaleChange.bind(this);
@@ -553,7 +556,9 @@ class Scheduler extends React.Component {
                     tot += units[i]
                 }
             };
-            tot_units += units[i];
+            if (!(grade == "NC")) { 
+                tot_units += units[i];
+            }
         };
         if (!(number == -1) ) {
             var temp_tot = this.state.unit_relev_tots.slice();
@@ -748,8 +753,8 @@ class Scheduler extends React.Component {
     }
 
     addYear = () => { 
-        var temp_years = this.state.years; 
-        var temp_opened = this.state.opened; 
+        var temp_years = this.state.years.slice(); 
+        var temp_opened = this.state.opened.slice(); 
         temp_opened.push(true);
         temp_years.push(temp_years.length); 
         this.setState({ 
@@ -764,6 +769,19 @@ class Scheduler extends React.Component {
         this.setState({ 
             years: temp_years,
             opened: temp_opened
+        })
+    }
+    addMajor = () => { 
+        var temp_majors = this.state.majors.slice();
+        temp_majors.push(temp_majors.length);
+        this.setState({ 
+            majors: temp_majors
+        })
+    }
+    removeMajor = () => { 
+        var temp_majors = this.state.majors.slice(0, -1);
+        this.setState({ 
+            majors: temp_majors
         })
     }
 
@@ -783,6 +801,19 @@ class Scheduler extends React.Component {
 
   
     render() {
+        const majors = this.state.majors.map( num => 
+            <div class = "col-md-5"> 
+                <div class = "semester"> 
+                <div class = "semesterheader"> 
+                    Major {num + 1}: 
+                </div>
+                    {this.renderMajorViewer()}
+                </div>
+            </div>
+            )
+
+
+
         // const sys = this.state.system; 
         // let layout;
         // if (sys == "Semester") { 
@@ -916,22 +947,25 @@ class Scheduler extends React.Component {
                 </div>
                 <div> 
                     <div class = "row">
-                        <div class = "col-md-3">
+                        <div class = "col-md-2">
                             <h5> General Instructions</h5>
                             <p> I haven't perfected the update mechanism for the major section. 
                                 It is still accurate, but if you make an update to any values in the 
                                 main areas, you have to reselect the class in the major section for it 
                                 to update (click on the empty class and then the original class). 
                                  </p> 
+                                 <div class = "textalign">
+                                    <span> <Button color = "success" style = {{"padding-top": "1%", "padding-bottom": "1%"}} onClick = {this.addMajor}> + Major  </Button> </span>
+                                    <Button color = "danger" style = {{"padding-top": "1%", "padding-bottom": "1%"}} onClick = {this.removeMajor}>  - Major </Button> 
+                                </div>
                         </div>
-                        <div class = "col-md-6"> 
-                            <div class = "semester"> 
-                            <div class = "semesterheader"> 
-                                Major 1: 
-                            </div>
-                                {this.renderMajorViewer()}
+                        <div class = "col-md-10"> 
+                            <div class = "row"> 
+                                {majors}
                             </div>
                         </div>
+                        
+                        
                     </div> 
                 </div> 
             </div>
