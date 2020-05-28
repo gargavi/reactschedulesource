@@ -2,7 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom'; 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "./index.css"
-import { Collapse, Button, CardBody, Card } from 'reactstrap';
+import { Collapse, CardBody,Button, Card } from 'reactstrap';
+import {Tab, Nav, Col, Row, Tabs} from 'react-bootstrap';
 
 
 
@@ -511,7 +512,7 @@ class Scheduler extends React.Component {
             cumm_gpa: "N/A", 
             cumm_unit: 0, 
             cumm_relev_units: 0, 
-            opened: Array(4).fill(true),
+            opened: [true, false, false, false],
             classdict: Object({ 
                 "": ["", "", ""]
             }),
@@ -530,7 +531,6 @@ class Scheduler extends React.Component {
             grades: newgrades
         })
     }
-
     renderGPAscale () { 
         return (
         <GPAchanger 
@@ -704,40 +704,33 @@ class Scheduler extends React.Component {
             semesyear.push(1);
             var layout =
             <div> 
-            <div class = "col-md-11"> 
+            <div className = "summer"> 
+            <Button color = "danger"  onClick = {() => {var temp= this.state.summers.slice(); temp[number] = !temp[number]; this.setState({summers: temp} )}}> Summer  </Button>
+            </div> 
             {semesarray.map(num => 
                 <div className = {className} > 
                     {this.renderSemester(terms[num] + (number + semesyear[num] + this.state.startyear), 5*number + num  )}
                 </div>
                 )}
-            </div>
-            <div class = "col-md-1"> 
-                <Button color = "danger" style = {{"padding-top": "1%", "padding-bottom": "1%", "marginRight": "4%"}} onClick = {() => {var temp= this.state.summers.slice(); temp[number] = !temp[number]; this.setState({summers: temp} )}}> Summer  </Button>
-            </div>
             </div>;
         } else { 
             var className = "col-md-" + 12/Number(semesters) + " semestersys";
             var layout =
-            <div> 
-            <div class = "col-md-11"> 
+            <div>
+            <div className = "summer"> 
+            <Button color = "success"  onClick = {() => {var temp= this.state.summers.slice(); temp[number] = !temp[number]; this.setState({summers:temp })}}> Summer  </Button>
+            </div>
             {semesarray.map(num => 
                 <div className = {className} > 
                      {this.renderSemester(terms[num] + (number + semesyear[num] + this.state.startyear), 5*number + num  )}
                 </div>
                 )}
-            </div>
-            <div class = "col-md-1"> 
-                <Button color = "success" style = {{"padding-top": "1%", "padding-bottom": "1%", "marginRight": "4%"}} onClick = {() => {var temp= this.state.summers.slice(); temp[number] = !temp[number]; this.setState({summers:temp })}}> Summer  </Button>
-            </div>
             </div>;
         }
 
-        
-
-
         return (
         <div>
-            <Button color = "primary" style = {{ "marginTop": "4px"}} onClick = {(e) => this.toggleyear(number, e) } > Year {number + 1} </Button> 
+            <Button color = "primary" className ="activateyear" onClick = {(e) => this.toggleyear(number, e) } > Toggle Year {number + 1} </Button> 
                 <Collapse isOpen = {this.state.opened[number]} > 
                     <Card> 
                     <CardBody> 
@@ -784,7 +777,6 @@ class Scheduler extends React.Component {
             majors: temp_majors
         })
     }
-
     renderYears= () => { 
         let layout; 
         return (
@@ -798,8 +790,6 @@ class Scheduler extends React.Component {
         )
     }
 
-
-  
     render() {
         const majors = this.state.majors.map( num => 
             <div class = "col-md-5"> 
@@ -812,164 +802,120 @@ class Scheduler extends React.Component {
             </div>
             )
 
-
-
-        // const sys = this.state.system; 
-        // let layout;
-        // if (sys == "Semester") { 
-        //     // The goal here is to have 2 per row
-        //     const years = [0, 1, 2, 3]
-        //     layout = years.map(num => 
-        //     <div>
-        //         <Button color = "primary" style = {{ "marginTop": "4px"}} onClick = {(e) => this.toggleyear(num, e) } > Year {num + 1} </Button> 
-        //             <Collapse isOpen = {this.state.opened[num]} > 
-        //             <Card> 
-        //             <CardBody> 
-        //                 <div class = "row">
-        //                     <div class = "col-md-6 semestersys"> 
-        //                         {this.renderSemester("Fall " + (num +this.state.startyear), 2*num)}
-        //                     </div> 
-        //                     <div class = "col-md-6 semestersys"> 
-        //                         {this.renderSemester("Spring " + (num + this.state.startyear + 1), 2*num + 1)}
-        //                     </div>
-        //                 </div> 
-        //             </CardBody>
-        //             </Card> 
-        //         </Collapse>
-        //     </div>
-        //         )
-        // } else { 
-        //     // The goal her is to have 3 per row 
-        //     const years = [0, 1, 2, 3]
-        //     layout = years.map(num => 
-        //         <div>
-        //         <Button color = "primary" style = {{ "marginTop": "4px"}} onClick = {(e) => this.toggleyear(num, e) } > Year {num + 1} </Button> 
-        //             <Collapse isOpen = {this.state.opened[num]} > 
-        //             <Card> 
-        //             <CardBody> 
-        //                 <div class = "row">
-        //                     <div class = "col-md-4 quarter"> 
-        //                         {this.renderSemester("Fall " + (this.state.startyear + num), 3*num)}
-        //                     </div> 
-        //                     <div class = "col-md-4 quarter"> 
-        //                         {this.renderSemester("Winter " + (this.state.startyear + num + 1), 3*num + 1)}
-        //                     </div>
-        //                     <div class = "col-md-4 quarter" > 
-        //                         {this.renderSemester("Spring " + (this.state.startyear + num + 1), 3*num + 2)}
-        //                     </div>
-        //                 </div> 
-        //                 </CardBody>
-        //             </Card> 
-        //         </Collapse>
-        //     </div>
-        //         )
-        // }
-
         return ( 
-            <div class = "container"> 
-                <div class = "row titler"> 
-                    <h3 > Academic Planner </h3>
-                    <p> You can use this to plan out your academic career at any type of institution, 
-                        specifically aimed at college and high school students.</p> 
-                    <div class = "listelem"> 
-                        <ol> 
-                            <li> Select your System and Starting School Year </li> 
-                            <li> Adjust the Grading System (If a grade doesn't count towards GPA put "N/A") </li> 
-                            <li> If you are part way to graduation you can put your current GPA and unit total and then 
-                                adjust the semesters after (i.e if you are a first semester junior, 
-                                you can input your GPA and units through sophomore year and then start in year 3). </li> 
-                            <li> Input Your Grades. The Checkbox indicates weighted class (i.e AP or Honors Classes)) </li> 
-                        </ol>
-                        If you want to see how I made this, check out <a href = "https://github.com/gargavi/reactschedule" target = "_blank"> my github </a>
-                        and if you want to see other projects I've done check out  <a href = "https://www.avigarg.me" target = "_blank"> my website. </a> This 
-                        was inspired mainly by my sister and intense boredom. 
-                    </div> 
-                    <label style = {{paddingRight:'8px'}}> School System: </label> 
-                    <select  value = {this.state.system} onChange = {this.changeSystem}> 
-                        <option value  = "Semester">  Semester</option> 
-                        <option value = "Quarter"> Quarter</option>
-                    </select>
-                    <label style = {{paddingRight:'8px', paddingLeft: '14px'}}> Start Year:   </label> 
-                    <input 
-                        id = "Starting semester"
-                        name = "Starting semester"
-                        type = "number"
-                        className = "startyear"
-                        value = {this.state.startyear}
-                        onChange = {(event) => {this.setState({ startyear: Number(event.target.value)})}}
-                    /> 
-                </div> 
-                <div class = "row textalign"> 
-                    <label style = {{paddingRight:'8px'}}> Current GPA:  </label> 
-                    <input 
-                        id = "previous gpa" 
-                        name = "previous gpa"
-                        type = "number" 
-                        className = "startyear"
-                        value = {this.state.gpas[0]}
-                        onChange = {this.previousGPA}
-                    />
-                    <label style = {{ paddingLeft: '8px', paddingRight:'8px'}}> Current Total Credited Units:  </label> 
-                    <input 
-                        id = "previous units" 
-                        name = "previous units"
-                        type = "number" 
-                        min = "0"
-                        className = "startyear"
-                        value = {this.state.unit_relev_tots[0]}
-                        onChange = {this.previousUnits}
-                    />
+            <div class = "container">
+                <div class= "title">
+                <h3 id = "title"> Academic Planner </h3>
+                <p> You can use this to plan out your academic career at any type of institution, 
+                    specifically aimed at college and high school students.</p>
                 </div>
                 <div class = "row textalign"> 
-                    <label style = {{paddingRight:'8px'}}> Predicted GPA: </label> 
-                    {this.state.cumm_gpa}
-                    <label style = {{paddingRight:'8px', paddingLeft: '20px'}}> Predicted Total Units: </label> 
-                    {this.state.cumm_unit}
-                    <label style = {{paddingRight:'8px', paddingLeft: '20px'}}> Predicted Credited Units: </label> 
-                    {this.state.cumm_relev_units} 
+                        <label style = {{paddingRight:'8px'}}> Predicted GPA: </label> 
+                        {this.state.cumm_gpa}
+                        <label style = {{paddingRight:'8px', paddingLeft: '20px'}}> Predicted Total Units: </label> 
+                        {this.state.cumm_unit}
+                        <label style = {{paddingRight:'8px', paddingLeft: '20px'}}> Predicted Credited Units: </label> 
+                        {this.state.cumm_relev_units} 
 
                 </div>
-                <div class = "row" > 
-                    <div class = "col-md-1">
-                        {this.renderGPAscale()}
-                    </div>             
-                    <div class = "col-md-11 classesview">
-                        {this.renderYears()}
-                    </div> 
-                </div>
-                <div class = "row">
-                    <div class = "textalign">
-                    <Button color = "success" style = {{"padding-top": "1%", "padding-bottom": "1%", "marginRight": "4%"}} onClick = {this.addYear}> +  </Button> 
-                     <Button color = "danger" style = {{"padding-top": "1%", "padding-bottom": "1%"}} onClick = {this.removeYear}>  - </Button> 
-                    </div>
-                </div>
-                <div class = "divider">
-                </div>
-                <div> 
-                    <div class = "row">
-                        <div class = "col-md-2">
-                            <h5> General Instructions</h5>
-                            <p> I haven't perfected the update mechanism for the major section. 
-                                It is still accurate, but if you make an update to any values in the 
-                                main areas, you have to reselect the class in the major section for it 
-                                to update (click on the empty class and then the original class). 
-                                 </p> 
-                                 <div class = "textalign">
-                                    <span> <Button color = "success" style = {{"padding-top": "1%", "padding-bottom": "1%"}} onClick = {this.addMajor}> + Major  </Button> </span>
-                                    <Button color = "danger" style = {{"padding-top": "1%", "padding-bottom": "1%"}} onClick = {this.removeMajor}>  - Major </Button> 
+                <Tabs defaultActiveKey="general" transition={false}>
+                    <Tab eventKey="general" title="General">
+                        <div class = "row">         
+                            <div class = "col-md-7">
+                                <div class = "listelem"> 
+                                    <h4> Instructions: </h4> 
+                                    <ol> 
+                                        <li> Select your System and Starting School Year </li> 
+                                        <li> Adjust the Grading System (If a grade doesn't count towards GPA put "N/A") </li> 
+                                        <li> If you are part way to graduation you can put your current GPA and unit total and then 
+                                            adjust the semesters after (i.e if you are a first semester junior, 
+                                            you can input your GPA and units through sophomore year and then start in year 3). </li> 
+                                        <li> Input Your Grades. The Checkbox indicates weighted class (i.e AP or Honors Classes)) </li> 
+                                    </ol>
+                                </div> 
+                                
+                                <div className = "additionalinfo">
+                                <p> If you want to see how I made this, check out <a href = "https://github.com/gargavi/reactschedule" target = "_blank"> my github </a>
+                                    and if you want to see other projects I've done check out  <a href = "https://www.avigarg.me" target = "_blank"> my website. </a> This 
+                                    was inspired mainly by my sister and intense boredom. </p>
                                 </div>
-                        </div>
-                        <div class = "col-md-10"> 
-                            <div class = "row"> 
-                                {majors}
+                            </div> 
+                            <div class = "col-md-2 inputinfo">
+                                    <label> School System: </label> 
+                                    <select  value = {this.state.system} onChange = {this.changeSystem}> 
+                                        <option value  = "Semester">  Semester</option>     
+                                        <option value = "Quarter"> Quarter</option>
+                                        </select>
+                                    <label> Start Year:   </label> 
+                                        <input 
+                                            id = "Starting semester"
+                                            name = "Starting semester"
+                                            type = "number"
+                                            className = "startyear"
+                                            value = {this.state.startyear}
+                                            onChange = {(event) => {this.setState({ startyear: Number(event.target.value)})}}
+                                        /> 
+                                
+                                    <label> Current GPA:  </label> 
+                                    <input 
+                                        id = "previous gpa" 
+                                        name = "previous gpa"
+                                        type = "number" 
+                                        className = "startyear"
+                                        value = {this.state.gpas[0]}
+                                        onChange = {this.previousGPA}
+                                    />
+                                    <label> Current Total Credited Units:  </label> 
+                                    <input 
+                                        id = "previous units" 
+                                        name = "previous units"
+                                        type = "number" 
+                                        min = "0"
+                                        className = "startyear"
+                                        value = {this.state.unit_relev_tots[0]}
+                                        onChange = {this.previousUnits}
+                                    />
+                                
+                            </div>
+                            <div class = "col-md-2 gpascale"> 
+                            {this.renderGPAscale()}
                             </div>
                         </div>
-                        
-                        
-                    </div> 
-                </div> 
-            </div>
-           
+                    </Tab>
+                    <Tab eventKey="classes" title="Classes">
+                        <div className = "row">
+                            <div className = "col-md-12 classesview">
+                                <div className = "textalign">
+                                <Button color = "success" style = {{"padding-top": "1%", "padding-bottom": "1%", "marginRight": "4%"}} onClick = {this.addYear}> Add Year  </Button> 
+                                <Button color = "danger" style = {{"padding-top": "1%", "padding-bottom": "1%"}} onClick = {this.removeYear}>  Remove Year </Button> 
+                                </div>
+                            {this.renderYears()}
+                            </div>
+                        </div>
+                    </Tab>
+                    <Tab eventKey="major" title = "Majors"> 
+                        <div class = "row" style = {{padding: "3%"}}>
+                            <div class = "col-md-2">
+                                <h5> General Instructions</h5>
+                                <p> I haven't perfected the update mechanism for the major section. 
+                                    It is still accurate, but if you make an update to any values in the 
+                                    main areas, you have to reselect the class in the major section for it 
+                                    to update (click on the empty class and then the original class). 
+                                    </p> 
+                                    <div class = "textalign">
+                                        <span> <Button color = "success" style = {{"padding-top": "1%", "padding-bottom": "1%"}} onClick = {this.addMajor}> + Major  </Button> </span>
+                                        <Button color = "danger" style = {{"padding-top": "1%", "padding-bottom": "1%"}} onClick = {this.removeMajor}>  - Major </Button> 
+                                    </div>
+                            </div>
+                            <div class = "col-md-10"> 
+                                <div class = "row"> 
+                                    {majors}
+                                </div>
+                            </div>
+                        </div>    
+                    </Tab>
+                </Tabs>
+           </div> 
         )
     }
 }

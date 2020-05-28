@@ -1,7 +1,7 @@
 body { 
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 14px;
-    background-color: rgb(231, 231, 231);
+    font-family: 'Gill Sans', 'Gill Sans MT', 'Trebuchet MS', sans-serif;
+    font-size: 16px;
+    background-color: rgb(239, 243, 245);
 }
 
 input { 
@@ -12,19 +12,14 @@ input {
 .divider { 
     height: 50px;
 }
-
-h5 { 
-    font-weight: bolder;
+.title { 
+    text-align: center;
+    font-weight: bold;
+}
+.title h3 { 
+    font-weight: bold;
 }
 
-.collapser { 
-    background-color: blue;
-    color: white;
-}
-
-.startyear { 
-    width: 10%;
-}
 th,td { 
     text-align: center;
     padding-top: 4px;
@@ -51,7 +46,8 @@ th,td {
 }
 
 label { 
-    padding-right: 8px;
+    margin-right: 8px;
+
 }
 .namecell { 
     width: 35%;
@@ -76,14 +72,36 @@ label {
 
 
 .listelem { 
-    margin: auto;
-    align-self: center;
-    text-align: left;
+    margin-top: 4%;
+    margin-right: 4%;
+    margin-left: 2%;
     font-weight: normal;
     font-size: 14px;
-    width: 60%;
-    padding-bottom: 1%;
+    width: 100%;
+    border-style: solid;
+    padding: 3%;
 }
+
+.listelem li { 
+    margin-top: 2%;
+}
+
+.inputinfo { 
+    text-align: center;
+}
+.inputinfo input { 
+    width: 80%;
+}
+.inputinfo label { 
+    margin-top: 16%;
+}
+
+
+.listelem h4 { 
+    text-align: center;
+    font-weight: bold;
+}
+
 .textalign { 
     text-align: center;
     padding-top: 1.5%;
@@ -103,6 +121,24 @@ label {
 .col-md-4.quarter { 
     padding-right: .5%;
     padding-left: .5%;
+}
+
+.summer { 
+    text-align: right;
+    padding-right: 3%;
+    float: right;
+    width: 100%;
+}
+.activateyear{ 
+    background-color: white;
+    margin-top: 1%;
+    border-style: solid;
+    color: black;
+    border-radius: 0;
+    border-color: black;
+    border-width: 2px;
+    text-align: center;
+    height: 40px;
 }
 
 .table { 
@@ -151,7 +187,6 @@ label {
     width: 100%;
 }
 
-
 /* GPAScale CSS */ 
 .gpalabel { 
     width: 30%;
@@ -174,8 +209,7 @@ label {
     border-color: grey;
     text-align: center;
     background-color: rgb(43, 45, 192);
-
-
+    margin-top: 10%;
 }
 
 .gparow { 
@@ -183,6 +217,52 @@ label {
     margin-top: 4%;
 }
 
+.gpascale { 
+    margin-right: 4%;
+}
+
 .classesview { 
-    padding-left: 4%;
+    padding: 3%;
+}
+
+/* Tab CSS */
+.nav-tabs a { 
+    color: white;
+    font-size: 20px;
+    background-color: black;
+    border-style: solid;
+    margin: 1%;
+    border-color: black;
+    border-radius: 4%;
+    padding: 1%;
+}
+
+
+.active { 
+    background-color: white !important;
+    color: black !important;
+    border-style: solid;
+    margin-bottom: 10% !important;
+    margin-top: 1%;
+    text-decoration: none !important;
+}
+.nav-link.active { 
+    border-bottom-style: none;
+}
+
+.nav-tabs { 
+    margin-bottom: 1%;
+    margin-top: 3%;
+    border-style: none;
+}
+
+.additionalinfo { 
+    margin-left: 3%;
+    margin-top: 3%;
+    padding: 2%;
+    background-color: black;
+    color: white;
+}
+.additionalinfo a { 
+    color: rgb(136, 201, 212);
 }
